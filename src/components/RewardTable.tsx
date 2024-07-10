@@ -50,9 +50,10 @@ const RewardTable = () => {
     }
     const fetchSolPrice = async (date: any) => {
 
-        const reqSolPrice: any = await fetch(`https://api.coingecko.com/api/v3/coins/solana/history?date=${date}`, {
+        const reqSolPrice: any = await fetch(`https://pro-api.coingecko.com/api/v3/coins/solana/history?date=${date}`, {
             method: 'GET',
             headers: {
+                    'x-cg-pro-api-key':  "CG-nZbvPjrvA1C9vKwfY16wnED5",
                 'Content-Type': 'application/json'
             },
         })
@@ -88,7 +89,10 @@ const RewardTable = () => {
                 setloading(true)
                 const epoch = index;
                 const rewardRes: (InflationReward | null)[] = await connection.getInflationReward([account], epoch);
-                await sleep(1000)
+                const voteFees = await connection.getParsedAccountInfo(new PublicKey('7K8DVxtNJGnMtUY1CQJT5jcs8sFGSZTDiG7kowvFpECh'))
+                console.log(voteFees);
+                
+                await sleep(500)
                 const reward: any = rewardRes[0];
                 // get date
                 const unixTimestamp: any = await connection.getBlockTime(reward.effectiveSlot)
